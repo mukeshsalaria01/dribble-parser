@@ -76,7 +76,8 @@ namespace Dribble.Parser
                             var getHrefValue = Regex.Match(inner.Value, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
                             var finalValue = getHrefValue.Split('/')[1];
 
-                            string designerUrl = "https://dribbble.com/" + finalValue;
+                            string baseURL = "https://dribbble.com/";
+                            string designerUrl = baseURL + finalValue;
                             //get all profile details
                             WebPage getInformation = browser.NavigateToPage(new Uri(designerUrl));
 
@@ -101,7 +102,7 @@ namespace Dribble.Parser
                                 getPersonalInfo = Regex.Replace(personnelInformation[0].InnerText, @"\t|\n|\r", "").Trim();
                             }
                             Console.WriteLine("*******  *Main Information*  **************");
-                            Console.WriteLine(getNameInfo + "\n" + getAddressInfo + "\n" + getPersonalInfo);
+                            Console.WriteLine("Name: " + getNameInfo + "\n" + "Location: " + getAddressInfo + "\n" + "Bio: " + getPersonalInfo);
 
                             var skillList = getInformation.Html.SelectNodes(".//div[@class='floating-sidebar-float']/div/ul/li");
                             if (skillList != null)
@@ -110,7 +111,8 @@ namespace Dribble.Parser
                                 foreach (var skill in skillList)
                                 {
                                     string data = Regex.Replace(skill.InnerText, @"\t|\n|\r", "");
-                                    Console.WriteLine(data.Trim());
+                                    string URL = Regex.Match(skill.InnerHtml, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
+                                    Console.WriteLine(data.Trim() + "      " + baseURL + URL);
                                 }
                             }
 
@@ -121,7 +123,8 @@ namespace Dribble.Parser
                                 foreach (var team in onTeams)
                                 {
                                     string data = Regex.Replace(team.InnerText, @"\t|\n|\r", "");
-                                    Console.WriteLine(data.Trim());
+                                    string URL = Regex.Match(team.InnerHtml, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
+                                    Console.WriteLine(data.Trim() + "      " + baseURL + URL);
                                 }
                             }
 
@@ -132,7 +135,8 @@ namespace Dribble.Parser
                                 foreach (var elseWhere in otherDetails)
                                 {
                                     string data = Regex.Replace(elseWhere.InnerText, @"\t|\n|\r", "");
-                                    Console.WriteLine(data.Trim());
+                                    string URL = Regex.Match(elseWhere.InnerHtml, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
+                                    Console.WriteLine(data.Trim() + "      " + baseURL + URL);
                                 }
                             }
 
@@ -143,7 +147,8 @@ namespace Dribble.Parser
                                 foreach (var project in projectList)
                                 {
                                     string data = Regex.Replace(project.InnerText, @"\t|\n|\r", "").Trim();
-                                    Console.WriteLine(data.Replace(" ", String.Empty));
+                                    string URL = Regex.Match(project.InnerHtml, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
+                                    Console.WriteLine(data.Replace(" ", String.Empty) + "      " + baseURL + URL);
                                 }
                             }
 
@@ -154,7 +159,8 @@ namespace Dribble.Parser
                                 foreach (var feature in featuredList)
                                 {
                                     string data = Regex.Replace(feature.InnerText, @"\t|\n|\r", "");
-                                    Console.WriteLine(data.Trim());
+                                    string URL = Regex.Match(feature.InnerHtml, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
+                                    Console.WriteLine(data.Trim() + "      " + baseURL + URL);
                                 }
                             }
                         }
