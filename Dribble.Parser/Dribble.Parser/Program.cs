@@ -70,15 +70,15 @@ namespace Dribble.Parser
                         if (!string.IsNullOrEmpty(item.InnerText))
                         {
                             Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------");
-                            //get all desiners and terms step by step
+                            //get all designers and terms step by step
                             string pattern = "<a\\s+(?:[^>]+\\s+)?class\\s*=\\s*(?:jobs-mark(?=\\s|>)|(['\"])(?:(?:(?!\\1).)*?\\s+)*jobs-mark(?:\\s+(?:(?!\\1).)*?)*\\1)[^>]*>(.*?)</a>";
                             var inner = Regex.Match(item.InnerHtml, pattern, RegexOptions.Singleline);
                             var getHrefValue = Regex.Match(inner.Value, "href\\s*=\\s*\"(?<url>.*?)\"").Groups["url"].Value;
                             var finalValue = getHrefValue.Split('/')[1];
 
-                            string designerURL = "https://dribbble.com/" + finalValue;
+                            string designerUrl = "https://dribbble.com/" + finalValue;
                             //get all profile details
-                            WebPage getInformation = browser.NavigateToPage(new Uri(designerURL));
+                            WebPage getInformation = browser.NavigateToPage(new Uri(designerUrl));
 
                             string getNameInfo = string.Empty;
                             var nameDetails = getInformation.Html.SelectNodes(".//div[@class='profile-info-mod profile-essentials']/h1/a");
@@ -94,14 +94,14 @@ namespace Dribble.Parser
                                 getAddressInfo = Regex.Replace(addressDetails[0].InnerText, @"\t|\n|\r", "").Trim();
                             }
 
-                            string getPersonelInfo = string.Empty;
+                            string getPersonalInfo = string.Empty;
                             var personnelInformation = getInformation.Html.SelectNodes(".//div[@class='bio']");
                             if (personnelInformation != null)
                             {
-                                getPersonelInfo = Regex.Replace(personnelInformation[0].InnerText, @"\t|\n|\r", "").Trim();
+                                getPersonalInfo = Regex.Replace(personnelInformation[0].InnerText, @"\t|\n|\r", "").Trim();
                             }
                             Console.WriteLine("*******  *Main Information*  **************");
-                            Console.WriteLine(getNameInfo + "\n" + getAddressInfo + "\n" + getPersonelInfo);
+                            Console.WriteLine(getNameInfo + "\n" + getAddressInfo + "\n" + getPersonalInfo);
 
                             var skillList = getInformation.Html.SelectNodes(".//div[@class='floating-sidebar-float']/div/ul/li");
                             if (skillList != null)
